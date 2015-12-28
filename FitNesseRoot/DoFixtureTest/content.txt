@@ -1,0 +1,14 @@
+!path /home/eric/git/jfit/src/main/java/fitlibrary/fitlibrary-2.0.jar
+!path /home/eric/workspace/fitnesse-standalone.jar
+!path lib/*.jar
+!path bin
+!define TEST_RUNNER {fitlibrary.suite.FitLibraryServer}
+
+|Import|
+|com.endegraaf.calcdemo|
+
+!|DoFixtureTest|
+|fill|10|times with|x|
+|char at|4|is|x|
+|set list|A,B,C,D|
+|char at|2|is|C|

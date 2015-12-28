@@ -1,0 +1,11 @@
+# define TEST_SYSTEM as 'slim' by default it is fit.
+!define TEST_SYSTEM {slim}
+!path bin
+
+|Import|
+|com.endegraaf.calcdemo|
+
+!| ABCDFixture|
+|num1| num2 | result?|
+|1   | 2    | 1      |
+|1   | 2    | 3      |

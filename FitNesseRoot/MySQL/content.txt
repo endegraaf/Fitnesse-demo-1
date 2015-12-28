@@ -1,0 +1,49 @@
+#!define TEST_SYSTEM {slim}
+!path bin/classes
+!path /home/eric/Documents/dbfit-complete-3.2.0/lib/*.jar
+#!define COMMAND_PATTERN={java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=1044 -cp %p %m}
+
+!|dbfit.MySqlTest|
+
+!|Connect|localhost|petclinic|P3tCl!nic|petclinic|
+
+!|Query| select 'test' as x|
+|x|
+|test|
+
+#|Insert|owners|
+#|first_name|last_name|address|city|telephone|
+#|Eric|Janssen|Langeweg|Den Haag|0243324908|
+
+!|Query| select first_name, last_name from owners where last_name = "de Graaf" or last_name="Janssen"|
+|first_name|last_name|
+|Eric|de Graaf|
+|Eric|Janssen|
+
+#|Execute|Create table Test_DBFit(name varchar(50), luckyNumber int)|
+
+#|Insert|Test_DBFit|
+#|name|luckyNumber|
+#|pera|1|
+#|nuja|2|
+#|nnn|3|
+
+#|Query|Select * from Test_DBFit|
+#|name|lucky Number|
+#|pera|1|
+#|nuja|2|
+#|nnn|4|
+
+|Import|
+|com.endegraaf.calcdemo|
+
+!| CalculatorFixture|
+|num1| num2 | result?|
+|1   | 2    | 1      |
+
+
+!| EmployeesHiredBefore|
+|Query:employees hired before|10-Dec-1980                                     |
+|company number              |employee number|first name|last name|hire date  |
+|4808147                     |9942           |Bill      |Mitchell |19-Dec-1966|
+|4808147                     |1429           |Bob       |Martin   |10-Oct-1975|

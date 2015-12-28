@@ -1,0 +1,22 @@
+!define TEST_SYSTEM {slim}
+!path lib/*jar
+!path bin
+
+|Import|
+|com.endegraaf.calcdemo|
+
+!|Query:Get Programs On A Given Day And Channel|3/4/2009|3                 |
+|Name                                          |Episode |StartTime|Duration|
+|N1                                            |E1      |18:00    |60      |
+|N1                                            |E2      |19:00    |60      |
+|N1                                            |E3      |20:00    |60      |
+
+!|Query:Employees Hired Before|01/01/2001|
+|eirjdlksj salkdjs |
+||
+||
+
+!|Query:MySQLTest|
+|4|
+||
+||

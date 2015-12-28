@@ -1,0 +1,17 @@
+# define TEST_SYSTEM as 'slim' by default it is fit.
+!define TEST_SYSTEM {slim}
+!path bin
+
+|Import|
+|com.endegraaf.calcdemo|
+
+!| CalculatorFixture|
+|num1| num2 | result?|
+|1   | 2    | 1      |
+|1   | 2    | 3      |
+
+
+|Query:employees hired before|10-Dec-1980                                     |
+|company number              |employee number|first name|last name|hire date  |
+|4808147                     |9942           |Bill      |Mitchell |19-Dec-1966|
+|4808147                     |1429           |Bob       |Martin   |10-Oct-1975|
