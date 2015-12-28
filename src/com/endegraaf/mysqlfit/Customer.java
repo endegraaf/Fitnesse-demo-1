@@ -2,6 +2,7 @@ package com.endegraaf.mysqlfit;
 
 public class Customer {
 	
+	// obsolete
 	private String id;
 	private String name;
 	private String salary;
