@@ -1,14 +1,15 @@
 DELIMITER $$
 CALL sp_owners_SELECT
    (
-	 10,
-          @p_first_name,
-          @p_last_name, 
-          @p_address,
-          @p_city,
-          @p_telephone
+	10,
+	@p_first_name,
+	@p_last_name, 
+	@p_address,
+	@p_city,
+  	@p_telephone
    )$$
-SELECT 
+SELECT
+	@p_id AS p_id,
     @p_first_name AS p_first_name,
     @p_last_name AS p_last_name,
     @p_address AS p_address,

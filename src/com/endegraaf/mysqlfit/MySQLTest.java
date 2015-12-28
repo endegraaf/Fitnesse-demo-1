@@ -17,8 +17,7 @@ public class MySQLTest {
 	private static final String DATABASE = 	"petclinic";
 	private static final String USER = 		"petclinic";
 	private static final String PASSWORD = 	"P3tCl!nic";
-	private static final String PATH = "/home/eric/workspace/Fitnesse-demo/";
-	
+	private static final String PATH = "/home/eric/workspace/Fitnesse-demo-1/";
 	QueryType qType;
 	String queryFile;
 	
@@ -78,6 +77,10 @@ public class MySQLTest {
 		return mConnection;
 	}
 	
+	/*
+	 * This method will call the ScriptRunner class
+	 * 
+	 */
 	public void RunAScript() throws FileNotFoundException, IOException,
 			SQLException {
 		Connection mConnection = null;

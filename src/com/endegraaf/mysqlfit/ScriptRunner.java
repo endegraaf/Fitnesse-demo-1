@@ -141,7 +141,7 @@ public class ScriptRunner {
                 }
                 String trimmedLine = line.trim();
                 
-                System.out.println("Line: " + trimmedLine );
+                //System.out.println("Line: " + trimmedLine );
                 
                 final Matcher delimMatch = delimP.matcher(trimmedLine);
                 if (trimmedLine.length() < 1
@@ -192,17 +192,17 @@ public class ScriptRunner {
                         
                         System.out.print("I Found " + cols + " columns ");
                         
-                        for (int i = 1; i < cols; i++) {
+                        for (int i = 1; i < cols; i++) { // starts counting at 1
                         	
                             String name = md.getColumnLabel(i);
                             
-                            System.out.println("Name " + name + " of column ");
+                            System.out.println("Name of column [" + name + "]");
                             
                             //System.out.print(name + "\t");
                         }
                         System.out.println("");
                         while (rs.next()) {
-                            for (int i = 0; i < cols; i++) {
+                            for (int i = 1; i < cols; i++) {
                                 String value = rs.getString(i);
                                 System.out.print(value + "\t");
                             }
