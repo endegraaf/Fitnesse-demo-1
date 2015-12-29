@@ -1,4 +1,4 @@
-!define REMOTE_DEBUG_COMMAND {java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000 -cp %p %m}
+#!define REMOTE_DEBUG_COMMAND {java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000 -cp %p %m}
 !define TEST_SYSTEM {slim}
 !path bin
 !path /home/eric/Documents/dbfit-complete-3.2.0/lib/*.jar
@@ -7,7 +7,7 @@
 |Import|
 |com.endegraaf.mysqlfit|efsef|
 
-!|Query:MySQLTest|STORED_PROCEDURE|script2.sql|
+!|Query:MySQLProcedures|STORED_PROCEDURE|script2.sql|
 |company number|employee number|first name|last name|hire date|
 |4808147|1429|Bob  |Martin  |10-Oct-1974|
 |5123122|8832|James|Grenning|15-Dec-1979|

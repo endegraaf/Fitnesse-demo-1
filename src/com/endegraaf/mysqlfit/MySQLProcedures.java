@@ -11,21 +11,21 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
-public class MySQLTest {
+public class MySQLProcedures {
 
 	private static final String SERVER = 	"localhost:3306";
 	private static final String DATABASE = 	"petclinic";
 	private static final String USER = 		"petclinic";
 	private static final String PASSWORD = 	"P3tCl!nic";
 	private static final String PATH = "/home/eric/workspace/Fitnesse-demo-1/";
-	QueryType qType;
+
 	String queryFile;
 	
-	public MySQLTest(String sQType, String queryFile) throws FileNotFoundException{
+	public MySQLProcedures(String sQType, String queryFile) throws FileNotFoundException{
 		/*
 		 * Know what type of query to run. 
-		 * a) stored procedure 
-		 * b) record set
+		 * a) stored procedure w/o resultset
+		 * b) query with record set
 		 * c) simple query f.e.
 		 *   - insert
 		 *   - select
@@ -52,12 +52,7 @@ public class MySQLTest {
 		}
 	}
 
-	public void SetQType(QueryType qType){
-		this.qType = qType;
-	}
-	public enum QueryType {
-		STORED_PROCEDURE, RECORD_SET, SIMPLE_QUERY
-	}
+
 	public void SetQueryFile(String qFile){
 		this.queryFile = qFile;
 	}
@@ -104,7 +99,7 @@ public class MySQLTest {
 		
 		return 
 			asList(// table level (1)
-				asList( // row level (3)
+				asList( // row level (3 rows)
 					asList("company number", "4808147"), // cell column name, value
 					asList("employee number", "1429"),
 					asList("first name", "Bob"),
