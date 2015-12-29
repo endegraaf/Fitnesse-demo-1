@@ -39,12 +39,6 @@ public class MySQLTestJunit {
 	}
 	
 	@Test
-	public void TestCreateOwnerInstance(){
-		//Owner Jan = new Owner(null, "Jan", "Janssen", "Janstraat 1", "Zwammerdam", "090-3092");
-		//Assert.assertEquals("Janssen", Jan.getLast_name());
-	}
-
-	@Test
 	public void TestDrivenDevelopment() throws FileNotFoundException, SQLException{
 		
 		MySQLProcedures mst = new MySQLProcedures("","");
@@ -58,7 +52,6 @@ public class MySQLTestJunit {
 		String[] mySjaak = Sjaak.NewOwner(null, "Sjaak", "Sjaaksma", "Sjaaktraat 1", "Sjaakdam", "009-3232");
 		
 		ownerList = SjaakWrapped.AddStringItemToList(mySjaak);
-
 		
 		Assert.assertEquals(expectedValueList, ownerList);
 
