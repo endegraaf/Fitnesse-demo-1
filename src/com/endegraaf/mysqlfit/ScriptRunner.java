@@ -58,6 +58,7 @@ public class ScriptRunner {
 
     private String delimiter = DEFAULT_DELIMITER;
     private boolean fullLineDelimiter = false;
+	private String[] returnArray;
 
     /**
      * Default constructor
@@ -97,7 +98,7 @@ public class ScriptRunner {
      *
      * @param reader - the source of the script
      */
-    public void runScript(Reader reader) throws IOException, SQLException {
+    public String[] runScript(Reader reader) throws IOException, SQLException {
         try {
             boolean originalAutoCommit = connection.getAutoCommit();
             try {
@@ -107,7 +108,7 @@ public class ScriptRunner {
                 System.out.println("");
                 System.out.println("runScript function in ScriptRunner.java");
                 System.out.println(reader);
-                runScript(connection, reader);
+                returnArray = runScript(connection, reader);
             } finally {
                 connection.setAutoCommit(originalAutoCommit);
             }
@@ -116,6 +117,7 @@ public class ScriptRunner {
         } catch (Exception e) {
             throw new RuntimeException("Error running script.  Cause: " + e, e);
         }
+		return returnArray;
     }
 
     /**
@@ -127,10 +129,10 @@ public class ScriptRunner {
      * @throws SQLException if any SQL errors occur
      * @throws IOException if there is an error reading from the Reader
      */
-    protected void runScript(Connection conn, Reader reader) throws IOException,
+    protected String[] runScript(Connection conn, Reader reader) throws IOException,
             SQLException {
         StringBuffer command = null;
-
+        
         try {
             LineNumberReader lineReader = new LineNumberReader(reader);
             String line;
@@ -168,7 +170,7 @@ public class ScriptRunner {
                     boolean hasResults = false;
                     try {
                         hasResults = statement.execute(command.toString());
-                        System.out.println("Value of has results [" + hasResults + "]");
+//                        System.out.println("Value of has results [" + hasResults + "]");
                     } catch (SQLException e) {
                         final String errText = String.format("Error executing '%s' (line %d): %s", command, lineReader.getLineNumber(), e.getMessage());
                         if (stopOnError) {
@@ -185,31 +187,39 @@ public class ScriptRunner {
                     ResultSet rs = statement.getResultSet();
                     if (hasResults && rs != null) {
                     	
-                    	System.out.println("Has results and has result set!");
+//                    	System.out.println("Has results and has result set!");
                     	
                         ResultSetMetaData md = rs.getMetaData();
                         int cols = md.getColumnCount();
                         
-                        System.out.print("I Found " + cols + " columns ");
+//                        System.out.print("I Found " + cols + " columns ");
                         
-                        for (int i = 1; i < cols; i++) { // starts counting at 1
-                        	
-                            String name = md.getColumnLabel(i);
-                            
-                            System.out.println("Name of column [" + name + "]");
-                            
-                            //System.out.print(name + "\t");
+                        String[] attributeName = new String[cols];
+                        String[] attributeValue= new String[cols];
+                        
+                        for (int i = 0; i < cols; i++) { // starts counting at 1
+                        	attributeName[i]=md.getColumnLabel(i+1);
                         }
                         System.out.println("");
+                        int teller=0;
                         while (rs.next()) {
-                            for (int i = 1; i < cols; i++) {
-                                String value = rs.getString(i);
-                                System.out.print(value + "\t");
+                        	teller++;
+                            for (int i = 0; i < cols; i++) {
+                            	attributeValue[i]=rs.getString(i+1);
+                            	//String value = rs.getString(i);
+                            	//System.out.print(value + "\t");
                             }
-                            System.out.println("");
+//                            System.out.println("Waarde van teller [" + teller + "]");
+                        }
+                        /* two arrays, one for the attributeNames, one for the Values.
+                           required output:
+                           'attributeName','attributeValue'
+                          */
+                        for (int i=0; i<teller;i++){
+                        	returnArray = returnValue(attributeName[i],attributeValue[i]) ;
                         }
                     }
-
+                    
                     command = null;
                     try {
                         statement.close();
@@ -224,6 +234,9 @@ public class ScriptRunner {
             if (!autoCommit) {
                 conn.commit();
             }
+            
+            return returnArray;
+            
         } catch (Exception e) {
             throw new IOException(String.format("Error executing '%s': %s", command, e.getMessage()), e);
         } finally {
@@ -232,6 +245,12 @@ public class ScriptRunner {
         }
     }
 
+    public String[] returnValue(String attributeName, String attributeValue){
+		String val[] = {attributeName,attributeValue};
+    	return val;
+    }
+//    
+    
     private String getDelimiter() {
         return delimiter;
     }

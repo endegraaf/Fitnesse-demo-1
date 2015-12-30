@@ -2,6 +2,7 @@ package com.endegraaf.mysqlfit;
 
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -30,14 +31,10 @@ public class MySQLTestJunit {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
-	@Test
-	public void TestThatQueryCanBePassed() throws SQLException, FileNotFoundException, IOException{
-		MySQLProcedures mst = new MySQLProcedures("STORED_PROCEDURE", "select_script.sql");
-		mst.RunAScript();
-		Assert.assertEquals("", "5.5.46-0ubuntu0.14.04.2");
-	}
-	
+
+	/*
+	 * Test Cases.
+	 */
 	@Test
 	public void TestDrivenDevelopment() throws FileNotFoundException, SQLException{
 		
@@ -48,15 +45,37 @@ public class MySQLTestJunit {
 		
 		OwnerWrapper SjaakWrapped = new OwnerWrapper();
 
-		Owner Sjaak = new Owner();
-		String[] mySjaak = Sjaak.NewOwner(null, "Sjaak", "Sjaaksma", "Sjaaktraat 1", "Sjaakdam", "009-3232");
+		Owner Sjaak = new Owner(10);
+		String[] mySjaak = Sjaak.NewOwner("Sjaak", "Sjaaksma", "Sjaaktraat 1", "Sjaakdam", "009-3232");
 		
 		ownerList = SjaakWrapped.AddStringItemToList(mySjaak);
 		
-		Assert.assertEquals(expectedValueList, ownerList);
-
-		
+		Assert.assertNotNull("Object is created.", ownerList);
+//		Assert.assertEquals(expectedValueList, ownerList);
 	}
+	@Test
+	public void GetValuesFromDatabase() throws SQLException, IOException{
+		
+		// Create instance of MySQLProcedures class.
+		MySQLProcedures msp = new MySQLProcedures("STORED_PROCEDURE", "select_script.sql");
+		
+		// Expected value is in expectedValueList
+		List<List<List<String>>> expectedValueList = msp.query();
+		
+		// Actual value
+		List<List<List<String>>> ownerList = new ArrayList<>();
+
+		// Create the object to get the actual values from DB
+		OwnerWrapper JohnWrapped = new OwnerWrapper();
+		ScriptRunner sr = new ScriptRunner(msp.con(), false, true);
+		String[] JohnStringArray = sr.runScript(new BufferedReader(new FileReader("/home/eric/workspace/Fitnesse-demo-1/select_script.sql")));
+		ownerList = JohnWrapped.AddStringItemToList(JohnStringArray);
+		
+		// Assertion
+		Assert.assertEquals(expectedValueList, ownerList);
+	}
+	
+	
 	
 	
 

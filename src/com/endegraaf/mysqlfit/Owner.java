@@ -10,48 +10,36 @@ public class Owner {
           @p_city,
           @p_telephone
 	 */
-	private String id;
+	private int id;
 	private String first_name;
 	private String last_name;
 	private String address;
 	private String city;
 	private String telephone;
 	
-//	public Owner(String id, String firstName, String lastName, String address, 
-//			String city, String telephone) {
-//		
-//		// Invoke getters and setters upon creation of class
-//		setId(id);
-//		setFirst_name(firstName);
-//		setLast_name(lastName);
-//		setAddress(address);
-//		setCity(city);
-//		setTelephone(telephone);
-//		
-//		NewOwner(getId(), getFirst_name(), getLast_name(), getAddress(), 
-//				getCity(), getTelephone());
-//		
-//	}
+	public Owner(int id){
+		setId(id);
+	}
 	
 	/*
 	 * @parameters id, firstName, lastName, address, city, telephone
 	 */
-	public String[] NewOwner(String id, String firstName, String lastName, String address, 
+	public String[] NewOwner(String firstName, String lastName, String address, 
 			String city, String telephone) {
 		
-		String[] a = {firstName, lastName};
+		String[] a = {"", ""};
 		return a;
 	}
 
 	/* 
 	 * Getters and setters
 	 */
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setId(int id2) {
+		this.id = id2;
 	}
 
 	public String getFirst_name() {

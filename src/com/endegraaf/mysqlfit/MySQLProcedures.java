@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MySQLProcedures {
@@ -17,9 +18,9 @@ public class MySQLProcedures {
 	private static final String DATABASE = 	"petclinic";
 	private static final String USER = 		"petclinic";
 	private static final String PASSWORD = 	"P3tCl!nic";
-	private static final String PATH = "/home/eric/workspace/Fitnesse-demo-1/";
-
-	String queryFile;
+	private static final String PATH = 		"/home/eric/workspace/Fitnesse-demo-1/";
+	private String queryFile;
+	private String[] returnArray;
 	
 	public MySQLProcedures(String sQType, String queryFile) throws FileNotFoundException{
 		/*
@@ -90,35 +91,49 @@ public class MySQLProcedures {
 			System.err.println("Unable to connect to server: " + e);
 		}
 		ScriptRunner runner = new ScriptRunner(mConnection, false, false);
-		runner.runScript(new BufferedReader(new FileReader(PATH + queryFile)));
+		returnArray = runner.runScript(new BufferedReader(new FileReader(PATH + queryFile)));
 	}
 
 	
-	public List<List<List<String>>> query() throws SQLException {
+	public List<List<List<String>>> query() throws SQLException, FileNotFoundException, IOException {
+
+		List<List<List<String>>> ownerList = new ArrayList<>();
+
+		// Create the object to get the actual values from DB
+		OwnerWrapper JohnWrapped = new OwnerWrapper();
+		ScriptRunner sr = new ScriptRunner(con(), false, true);
+		String[] JohnStringArray = sr.runScript(new BufferedReader(new FileReader("/home/eric/workspace/Fitnesse-demo-1/select_script.sql")));
+		ownerList = JohnWrapped.AddStringItemToList(JohnStringArray);
 
 		
-		return 
-			asList(// table level (1)
-				asList( // row level (3 rows)
-					asList("company number", "4808147"), // cell column name, value
-					asList("employee number", "1429"),
-					asList("first name", "Bob"),
-					asList("last name", "Martin"),
-					asList("hire date", "10-Oct-1974")
-				),asList(
-					asList("company number", "5123122"),
-					asList("employee number", "8832"),
-					asList("first name", "Bob"),
-					asList("last name", "Grenning"),
-					asList("hire date", "15-Dec-1979")
-				),asList(
-					asList("company number", "4543"),
-					asList("employee number", "45"),
-					asList("first name", "Jan"),
-					asList("last name", "Boelens"), 
-					asList("hire date", "")
-				)
-			);
+		return ownerList;
+		
+//		return 
+//			asList(
+//				asList(
+//					asList("first name", "Eric")));
+//		return 
+//			asList(// table level (1)
+//				asList( // row level (3 rows)
+//					asList("company number", "4808147"), // cell column name, value
+//					asList("employee number", "1429"),
+//					asList("first name", "Bob"),
+//					asList("last name", "Martin"),
+//					asList("hire date", "10-Oct-1974")
+//				),asList(
+//					asList("company number", "5123122"),
+//					asList("employee number", "8832"),
+//					asList("first name", "Bob"),
+//					asList("last name", "Grenning"),
+//					asList("hire date", "15-Dec-1979")
+//				),asList(
+//					asList("company number", "4543"),
+//					asList("employee number", "45"),
+//					asList("first name", "Jan"),
+//					asList("last name", "Boelens"), 
+//					asList("hire date", "")
+//				)
+//			);
 	}
 
 
