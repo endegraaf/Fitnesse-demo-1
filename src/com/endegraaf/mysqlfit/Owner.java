@@ -81,6 +81,22 @@ public class Owner {
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
+
+	public void setId(long long1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setName(String string) {
+		this.first_name = string;		
+	}
+
+	public void setValue(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 	
 
 }

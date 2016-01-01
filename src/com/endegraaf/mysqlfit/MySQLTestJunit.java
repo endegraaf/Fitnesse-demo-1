@@ -36,9 +36,9 @@ public class MySQLTestJunit {
 	 * Test Cases.
 	 */
 	@Test
-	public void TestDrivenDevelopment() throws FileNotFoundException, SQLException{
+	public void TestDrivenDevelopment() throws SQLException, IOException{
 		
-		MySQLProcedures mst = new MySQLProcedures("","");
+		MySQLProcedures mst = new MySQLProcedures("","", "");
 		
 		List<List<List<String>>> expectedValueList = mst.query();
 		List<List<List<String>>> ownerList = new ArrayList<>();
@@ -57,7 +57,7 @@ public class MySQLTestJunit {
 	public void GetValuesFromDatabase() throws SQLException, IOException{
 		
 		// Create instance of MySQLProcedures class.
-		MySQLProcedures msp = new MySQLProcedures("STORED_PROCEDURE", "select_script.sql");
+		MySQLProcedures msp = new MySQLProcedures("STORED_PROCEDURE", "select_script.sql", "8");
 		
 		// Expected value is in expectedValueList
 		List<List<List<String>>> expectedValueList = msp.query();
@@ -72,7 +72,26 @@ public class MySQLTestJunit {
 		ownerList = JohnWrapped.AddStringItemToList(JohnStringArray);
 		
 		// Assertion
+		Assert.assertEquals("", ownerList);
+	}
+	
+	@Test
+	public void BuildRecordSetReturnList() throws SQLException, IOException{
+
+		// Create instance of MySQLProcedures class.
+		MySQLProcedures msp = new MySQLProcedures("STORED_PROCEDURE", "select_script.sql", "8");
+		
+		// Expected value is in expectedValueList
+		List<List<List<String>>> expectedValueList = msp.query();
+		
+		// Actual value
+		List<List<List<String>>> ownerList = new ArrayList<>();
+		ownerList = msp.list();
+		
+		// Assertion
 		Assert.assertEquals(expectedValueList, ownerList);
+
+		
 	}
 	
 	

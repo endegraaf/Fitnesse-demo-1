@@ -7,9 +7,10 @@
 |Import|
 |com.endegraaf.mysqlfit|
 
-!|Query:MySQLProcedures|STORED_PROCEDURE|script2.sql|
-|first name   |last_name   |address                 |city    |telephone   |
-|Carlos       |Estaban     |2335 Independence La.   |        |6085555487  |
+!|Query:MySQLProcedures|STORED_PROCEDURE|select_script.sql|8|
+|first name   |last name   |address                 |city    |telephone   |
+|Maria        |Escobito    |345 Maple St.           |Madison |6085557683  |
+|Carlos       |Estaban     |2335 Independence La.   |        |6085555488  |
 
 
 #!|Query:MySQLProcedures|STORED_PROCEDURE|script2.sql|

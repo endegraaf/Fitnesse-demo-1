@@ -31,8 +31,12 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.mysql.jdbc.PreparedStatement;
 
 /**
  * Tool to run database scripts
@@ -59,6 +63,8 @@ public class ScriptRunner {
     private String delimiter = DEFAULT_DELIMITER;
     private boolean fullLineDelimiter = false;
 	private String[] returnArray;
+	List<List<String>> returnValueList = new ArrayList();
+    
 
     /**
      * Default constructor
@@ -244,8 +250,11 @@ public class ScriptRunner {
             flush();
         }
     }
-
+	   
     public String[] returnValue(String attributeName, String attributeValue){
+    	
+    	
+    	
 		String val[] = {attributeName,attributeValue};
     	return val;
     }
