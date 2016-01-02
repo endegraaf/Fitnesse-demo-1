@@ -22,6 +22,8 @@ package com.endegraaf.mysqlfit;
  *  limitations under the License.
  */
 
+import static java.util.Arrays.asList;
+
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
@@ -64,6 +66,7 @@ public class ScriptRunner {
     private boolean fullLineDelimiter = false;
 	private String[] returnArray;
 	List<List<String>> returnValueList = new ArrayList();
+	private String ownerId;
     
 
     /**
@@ -104,8 +107,12 @@ public class ScriptRunner {
      *
      * @param reader - the source of the script
      */
-    public String[] runScript(Reader reader) throws IOException, SQLException {
-        try {
+    public List<List<List<String>>> runScript(Reader reader, String ownerId) throws IOException, SQLException {
+        
+    	List<List<List<String>>> returnValue;
+    	setOwnerId(ownerId);
+    	
+    	try {
             boolean originalAutoCommit = connection.getAutoCommit();
             try {
                 if (originalAutoCommit != this.autoCommit) {
@@ -114,7 +121,7 @@ public class ScriptRunner {
                 System.out.println("");
                 System.out.println("runScript function in ScriptRunner.java");
                 System.out.println(reader);
-                returnArray = runScript(connection, reader);
+                returnValue = runScript(connection, reader);
             } finally {
                 connection.setAutoCommit(originalAutoCommit);
             }
@@ -123,7 +130,7 @@ public class ScriptRunner {
         } catch (Exception e) {
             throw new RuntimeException("Error running script.  Cause: " + e, e);
         }
-		return returnArray;
+		return returnValue;
     }
 
     /**
@@ -135,9 +142,10 @@ public class ScriptRunner {
      * @throws SQLException if any SQL errors occur
      * @throws IOException if there is an error reading from the Reader
      */
-    protected String[] runScript(Connection conn, Reader reader) throws IOException,
+    protected List<List<List<String>>> runScript(Connection conn, Reader reader) throws IOException,
             SQLException {
         StringBuffer command = null;
+        List<List<List<String>>> owners = null; 
         
         try {
             LineNumberReader lineReader = new LineNumberReader(reader);
@@ -148,10 +156,10 @@ public class ScriptRunner {
                     command = new StringBuffer();
                 }
                 String trimmedLine = line.trim();
-                
-                //System.out.println("Line: " + trimmedLine );
-                
                 final Matcher delimMatch = delimP.matcher(trimmedLine);
+				if (trimmedLine.contains("<OWNERID>")){
+					line=line.replace("<OWNERID>", getOwnerId());
+				}
                 if (trimmedLine.length() < 1
                         || trimmedLine.startsWith("//")) {
                     // Do nothing
@@ -159,19 +167,15 @@ public class ScriptRunner {
                     setDelimiter(delimMatch.group(2), false);
                 } else if (trimmedLine.startsWith("--")) {
                     println(trimmedLine);
-                } else if (trimmedLine.length() < 1
-                        || trimmedLine.startsWith("--")) {
+                } else if (trimmedLine.length() < 1 || trimmedLine.startsWith("--")) {
                     // Do nothing
-                } else if (!fullLineDelimiter
-                        && trimmedLine.endsWith(getDelimiter())
-                        || fullLineDelimiter
-                        && trimmedLine.equals(getDelimiter())) {
-                    command.append(line.substring(0, line
-                            .lastIndexOf(getDelimiter())));
+                } else if (!fullLineDelimiter && trimmedLine.endsWith(getDelimiter()) 
+                		|| fullLineDelimiter  && trimmedLine.equals(getDelimiter())) {
+                    command.append(line.substring(0, line.lastIndexOf(getDelimiter())));
                     command.append(" ");
                     Statement statement = conn.createStatement();
-                    System.out.println("Level 2 - Try to execute the command over the connection.");
-                    //System.out.println(command);
+                    //System.out.println("Level 2 - Try to execute the command over the connection.");
+                    System.out.println(command);
 
                     boolean hasResults = false;
                     try {
@@ -185,47 +189,21 @@ public class ScriptRunner {
                             println(errText);
                         }
                     }
-
                     if (autoCommit && !conn.getAutoCommit()) {
                         conn.commit();
                     }
-
                     ResultSet rs = statement.getResultSet();
                     if (hasResults && rs != null) {
-                    	
-//                    	System.out.println("Has results and has result set!");
-                    	
-                        ResultSetMetaData md = rs.getMetaData();
-                        int cols = md.getColumnCount();
-                        
-//                        System.out.print("I Found " + cols + " columns ");
-                        
-                        String[] attributeName = new String[cols];
-                        String[] attributeValue= new String[cols];
-                        
-                        for (int i = 0; i < cols; i++) { // starts counting at 1
-                        	attributeName[i]=md.getColumnLabel(i+1);
-                        }
-                        System.out.println("");
-                        int teller=0;
-                        while (rs.next()) {
-                        	teller++;
-                            for (int i = 0; i < cols; i++) {
-                            	attributeValue[i]=rs.getString(i+1);
-                            	//String value = rs.getString(i);
-                            	//System.out.print(value + "\t");
-                            }
-//                            System.out.println("Waarde van teller [" + teller + "]");
-                        }
-                        /* two arrays, one for the attributeNames, one for the Values.
-                           required output:
-                           'attributeName','attributeValue'
-                          */
-                        for (int i=0; i<teller;i++){
-                        	returnArray = returnValue(attributeName[i],attributeValue[i]) ;
-                        }
+            			while (rs.next()) {
+            				owners = asList(asList(
+            						asList("first name", rs.getString(1)),
+            						asList("last name", rs.getString(2)),
+            						asList("address", rs.getString(3)),
+            						asList("city", rs.getString(4)),
+            						asList("telephone", rs.getString(5))
+            						));
+            			}
                     }
-                    
                     command = null;
                     try {
                         statement.close();
@@ -241,7 +219,7 @@ public class ScriptRunner {
                 conn.commit();
             }
             
-            return returnArray;
+            return owners;
             
         } catch (Exception e) {
             throw new IOException(String.format("Error executing '%s': %s", command, e.getMessage()), e);
@@ -258,7 +236,13 @@ public class ScriptRunner {
 		String val[] = {attributeName,attributeValue};
     	return val;
     }
-//    
+    
+    public String getOwnerId() {
+		return ownerId;
+	}
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
+	}
     
     private String getDelimiter() {
         return delimiter;

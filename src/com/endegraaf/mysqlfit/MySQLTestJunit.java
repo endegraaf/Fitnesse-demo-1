@@ -68,34 +68,30 @@ public class MySQLTestJunit {
 		// Create the object to get the actual values from DB
 		OwnerWrapper JohnWrapped = new OwnerWrapper();
 		ScriptRunner sr = new ScriptRunner(msp.con(), false, true);
-		String[] JohnStringArray = sr.runScript(new BufferedReader(new FileReader("/home/eric/workspace/Fitnesse-demo-1/select_script.sql")));
-		ownerList = JohnWrapped.AddStringItemToList(JohnStringArray);
+		List<List<List<String>>> JohnStringArray = sr.runScript(new BufferedReader(new FileReader("/home/eric/workspace/Fitnesse-demo-1/select_script.sql")), "8");
+		//ownerList = JohnWrapped.AddStringItemToList(JohnStringArray);
 		
 		// Assertion
-		Assert.assertEquals("", ownerList);
+		Assert.assertEquals("", JohnStringArray);
 	}
 	
 	@Test
 	public void BuildRecordSetReturnList() throws SQLException, IOException{
 
+		List<List<List<String>>> expectedValueList;
+		List<List<List<String>>> ownerList = new ArrayList<>();
+		
 		// Create instance of MySQLProcedures class.
-		MySQLProcedures msp = new MySQLProcedures("STORED_PROCEDURE", "select_script.sql", "8");
+		MySQLProcedures msp = new MySQLProcedures("STORED_PROCEDURE", "select_script.sql", "20");
 		
 		// Expected value is in expectedValueList
-		List<List<List<String>>> expectedValueList = msp.query();
+		expectedValueList = msp.returnStaticTable();
 		
 		// Actual value
-		List<List<List<String>>> ownerList = new ArrayList<>();
-		ownerList = msp.list();
+		ownerList = msp.query();
 		
 		// Assertion
 		Assert.assertEquals(expectedValueList, ownerList);
 
-		
 	}
-	
-	
-	
-	
-
 }
