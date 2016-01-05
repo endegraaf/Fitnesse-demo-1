@@ -175,7 +175,7 @@ public class ScriptRunner {
                     command.append(" ");
                     Statement statement = conn.createStatement();
                     //System.out.println("Level 2 - Try to execute the command over the connection.");
-                    System.out.println(command);
+                    //System.out.println(command);
 
                     boolean hasResults = false;
                     try {

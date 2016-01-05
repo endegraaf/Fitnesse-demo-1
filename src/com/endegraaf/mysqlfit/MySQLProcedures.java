@@ -58,7 +58,7 @@ public class MySQLProcedures {
 			
 			if(queryFile!=null)
 			try {
-				System.out.print("try to run the script.");
+				//System.out.print("try to run the script.");
 				this.RunAScript();
 			} catch (IOException | SQLException e) {
 				System.out.printf("Exception in execute of script %s .", e);
@@ -101,46 +101,38 @@ public class MySQLProcedures {
 		return this.RunAScript();
 	}
 
-	public List<List<List<String>>> list() throws SQLException {
-
+	public String list(int i, String attribName) throws SQLException {
+		
+		String retVal = null;
 		java.sql.PreparedStatement statement = null;
 		ResultSet resultSet = null;
-		List<List<List<String>>> owners = null;
 
 		try {
-			//ScriptRunner scrRun = new ScriptRunner(con(), false, false);
-			try {
-				this.RunAScript();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			statement = this.con().prepareStatement(
-					"SELECT * from owners where id = 8");
+			statement = this.con().prepareStatement("SELECT " + attribName + " from owners where id = " + i);
 			resultSet = statement.executeQuery();
-
 			while (resultSet.next()) {
-
-				owners = asList(asList(
-						asList("first name", resultSet.getString("first_name")),
-						asList("last name", resultSet.getString("last_name")),
-						asList("address", resultSet.getString("address")),
-						asList("city", resultSet.getString("city")),
-						asList("telephone", resultSet.getString("telephone"))));
+				retVal = resultSet.getString(attribName);
+				System.out.println("Return value from function 'list' "	+ retVal);
 			}
 		} finally {
-			if (resultSet != null)	
-				try {resultSet.close();} catch (SQLException ignore) {}
+			if (resultSet != null)
+				try {
+					resultSet.close();
+				} catch (SQLException ignore) {
+				}
 			if (statement != null)
-				try {statement.close();} catch (SQLException ignore) {}
+				try {
+					statement.close();
+				} catch (SQLException ignore) {
+				}
 			if (con() != null)
-				try { con().close();} catch (SQLException ignore) {}
+				try {
+					con().close();
+				} catch (SQLException ignore) {
+				}
 		}
-		return owners;
+		return retVal;
 	}
-
 	
 
 	
@@ -148,11 +140,11 @@ public class MySQLProcedures {
 		return 
 			asList(
 				asList( // row level (3 rows)
-						asList("first name", "Sjaak"), // cell column name, value
-						asList("last name", "Sjaaksma"),
-						asList("address", "Sjaakstraat 7"),
-						asList("city", "Sjaakdam"),
-						asList("telephone", "8687680098")
+						asList("first name", "Eric"), // cell column name, value
+						asList("last name", "Janssen"),
+						asList("address", "Langeweg"),
+						asList("city", "Den Haag"),
+						asList("telephone", "0243324908")
 					)
 			);
 	}
@@ -171,6 +163,39 @@ public class MySQLProcedures {
 	public void SetQueryFile(String qFile){
 		this.queryFile = qFile;
 	}
+
+
+	/*
+	 * 
+	 * 	'1', 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023'
+		'2', 'Betty', 'Davis', '638 Cardinal Ave.', 'Sun Prairie', '6085551749'
+		'3', 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'McFarland', '6085558763'
+
+	 */
+	public List<List<List<String>>> returnStaticTableMultiRow() {
+		return asList(
+					asList(
+						// row level (3 rows)
+						asList("first name", "George"), // cell column name, value
+						asList("last name", "Franklin"),
+						asList("address", "110 W. Liberty St.")
+					),
+					asList(
+						// row level (3 rows)
+						asList("first name", "Betty"), // cell column name, value
+						asList("last name", "Davis"),
+						asList("address", "638 Cardinal Ave.")
+					),
+					asList(
+						// row level (3 rows)
+						asList("first name", "Eduardo"), // cell column name, value
+						asList("last name", "Rodriquez"),
+						asList("address", "2693 Commerce St.")
+					)
+				);
+	}
+
+	
 
 
 

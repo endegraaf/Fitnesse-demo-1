@@ -1,5 +1,12 @@
 package com.endegraaf.mysqlfit;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Arrays;
+import static java.util.Arrays.asList;
+
 public class Owner {
 	
 	/*
@@ -21,14 +28,19 @@ public class Owner {
 		setId(id);
 	}
 	
-	/*
+	/*asList
 	 * @parameters id, firstName, lastName, address, city, telephone
 	 */
-	public String[] NewOwner(String firstName, String lastName, String address, 
-			String city, String telephone) {
+	public List<List<List<String>>> NewOwner(String firstName, String lastName,
+			String address, String city, String telephone) {
 		
-		String[] a = {"", ""};
-		return a;
+		return asList(
+					asList(
+					asList("first name",firstName),
+					asList("last name",lastName),
+					asList("address",address)
+					)
+				);
 	}
 
 	/* 

@@ -38,19 +38,15 @@ public class MySQLTestJunit {
 	@Test
 	public void TestDrivenDevelopment() throws SQLException, IOException{
 		
-		MySQLProcedures mst = new MySQLProcedures("","", "");
+		MySQLProcedures mst = new MySQLProcedures("STORED_PROCEDURE", "select_script.sql", "8");
 		
 		List<List<List<String>>> expectedValueList = mst.query();
 		List<List<List<String>>> ownerList = new ArrayList<>();
 		
-		OwnerWrapper SjaakWrapped = new OwnerWrapper();
-
 		Owner Sjaak = new Owner(10);
-		String[] mySjaak = Sjaak.NewOwner("Sjaak", "Sjaaksma", "Sjaaktraat 1", "Sjaakdam", "009-3232");
+		List<List<List<String>>> mySjaak = Sjaak.NewOwner("Sjaak", "Sjaaksma", "Sjaaktraat 1", "", "");
 		
-		ownerList = SjaakWrapped.AddStringItemToList(mySjaak);
-		
-		Assert.assertNotNull("Object is created.", ownerList);
+		Assert.assertNotNull("Object is created.", mySjaak);
 //		Assert.assertEquals(expectedValueList, ownerList);
 	}
 	@Test
@@ -72,7 +68,7 @@ public class MySQLTestJunit {
 		//ownerList = JohnWrapped.AddStringItemToList(JohnStringArray);
 		
 		// Assertion
-		Assert.assertEquals("", JohnStringArray);
+		Assert.assertEquals(expectedValueList, JohnStringArray);
 	}
 	
 	@Test
@@ -94,4 +90,54 @@ public class MySQLTestJunit {
 		Assert.assertEquals(expectedValueList, ownerList);
 
 	}
+	
+	@Test
+	public void ExecuteSqlStatementMultipleRows() throws SQLException, IOException{
+
+		List<String> list1 = new ArrayList<>();
+		List<List<String>> list2 = new ArrayList<>(); 
+		List<List<List<String>>> list3 = new ArrayList<>();
+		
+		// Expected value
+		List<List<List<String>>> staticValueList;
+
+		// Create instance of MySQLProcedures class.
+		MySQLProcedures msp = new MySQLProcedures("RECORD_SET", "select_script3.sql", "20");
+		
+		// Expected value is in staticValueList
+		staticValueList = msp.returnStaticTableMultiRow();
+		
+		for (int i=1; i<4; i++) {
+			list1=null;
+			list1 = new ArrayList<>();
+			list2=null;
+			list2 = new ArrayList<>();
+			
+			list1.add("first name");
+			list1.add(msp.list(i, "first_name"));
+			list2.add(list1);
+			
+			list1=null;
+			list1 = new ArrayList<>();
+			
+			list1.add("last name");
+			list1.add(msp.list(i, "last_name"));
+			list2.add(list1);
+			
+			list1=null;
+			list1 = new ArrayList<>();
+			
+			list1.add("address");
+			list1.add(msp.list(i, "address"));			
+			list2.add(list1);
+			
+			list3.add(list2);
+		}
+		
+		// Assertion
+		Assert.assertEquals(staticValueList, list3);
+
+	}
+	
+	
 }
