@@ -194,13 +194,6 @@ public class ScriptRunner {
                     }
                     ResultSet rs = statement.getResultSet();
                     if (hasResults && rs != null) {
-//            			while (rs.next()) {
-//            				owners = asList(asList(
-//            						asList("first name", rs.getString(1)),
-//            						asList("last name", rs.getString(2)),
-//            						asList("address", rs.getString(3))
-//            						));
-//            			}
                     	while (rs.next()) {
 
                             List<String> list1;
