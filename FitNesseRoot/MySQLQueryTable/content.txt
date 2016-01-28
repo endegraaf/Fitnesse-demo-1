@@ -2,15 +2,17 @@
 !path bin
 !path /home/eric/Documents/dbfit-complete-3.2.0/lib/*.jar
 
-
 |Import|
 |com.endegraaf.mysqlfit|
 
 # the custom fixture is MySQLProcedures. Arguments to pass to the constructor of that class should be put after that name. 
 # in this example, the test STORED_PROCEDURE, the name of the script and a id (8) are passed. 
 
-!|Query:MySQLProcedures|STORED_PROCEDURE|select_script.sql   |8            |
-|first name   | last name   |address                 |city    |telephone   | #comment         |
-|Maria        | Escobito    |345 Maple Street        |Madison |6085557683  | attribute values |
+#!|Query:MySQLProcedures|STORED_PROCEDURE|select_script3.sql   |8            |
+#|first name   | last name   |address                 |city    |telephone   | #comment         |
+#|Maria        | Escobito    |345 Maple Street        |Madison |6085557683  | attribute values |
 
+!|Query:MySQLProcedures|STORED_PROCEDURE|select_script3.sql   |8            |
+|first name   | last name   |address                 |
+|Maria        | Escobito    |345 Maple Street        |
 

@@ -26,6 +26,7 @@ public class MySQLProcedures {
 	private static final String USER = 		"petclinic";
 	private static final String PASSWORD = 	"P3tCl!nic";
 	private static final String PATH = 		"/home/eric/workspace/Fitnesse-demo-1/";
+	//private static final String PATH = 		"/home/eric/git/Fitnesse-demo-1/";
 	private String queryFile;
 	private String ownerId;
 	private String[] returnArray;
@@ -110,6 +111,7 @@ public class MySQLProcedures {
 		try {
 			statement = this.con().prepareStatement("SELECT " + attribName + " from owners where id = " + i);
 			resultSet = statement.executeQuery();
+			
 			while (resultSet.next()) {
 				retVal = resultSet.getString(attribName);
 				System.out.println("Return value from function 'list' "	+ retVal);

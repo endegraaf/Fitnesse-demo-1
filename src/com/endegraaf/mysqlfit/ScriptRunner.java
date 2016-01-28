@@ -175,7 +175,7 @@ public class ScriptRunner {
                     command.append(" ");
                     Statement statement = conn.createStatement();
                     //System.out.println("Level 2 - Try to execute the command over the connection.");
-                    //System.out.println(command);
+                    System.out.println(command);
 
                     boolean hasResults = false;
                     try {
@@ -194,15 +194,35 @@ public class ScriptRunner {
                     }
                     ResultSet rs = statement.getResultSet();
                     if (hasResults && rs != null) {
-            			while (rs.next()) {
-            				owners = asList(asList(
-            						asList("first name", rs.getString(1)),
-            						asList("last name", rs.getString(2)),
-            						asList("address", rs.getString(3)),
-            						asList("city", rs.getString(4)),
-            						asList("telephone", rs.getString(5))
-            						));
-            			}
+//            			while (rs.next()) {
+//            				owners = asList(asList(
+//            						asList("first name", rs.getString(1)),
+//            						asList("last name", rs.getString(2)),
+//            						asList("address", rs.getString(3))
+//            						));
+//            			}
+                    	while (rs.next()) {
+
+                            List<String> list1;
+                            List<List<String>> list2;
+                            owners = new ArrayList<>();
+
+                            int colCount = rs.getMetaData().getColumnCount();
+                            System.out.printf("Found %d comlumns", colCount);
+                           
+                            list1 = null;
+                            list2 = null;
+                            list2 = new ArrayList<>();
+                            // get all the columns
+                            for (int i = 1; i < colCount + 1; i++) {
+                                    list1 = new ArrayList<>();
+                                    list1.add(rs.getMetaData().getColumnName(i));
+                                    list1.add(rs.getString(i));
+                                    list2.add(list1);
+                            }
+                            owners.add(list2);
+                    }
+                    rs.close();
                     }
                     command = null;
                     try {
